@@ -38,16 +38,15 @@ const getUsers = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-
   const savedEmail = email.toLowerCase();
 
   userModel
     .findOne({ email: savedEmail })
-    .then((result) => {
+    .then(async (result) => {
       if (result) {
-        console.log(result);
         if (result.email == email) {
-          if (result.password == password) {
+          const savedPassword = await bcrypt.compare(password, result.password);
+          if (savedPassword) {
             res.status(200).json(result);
           } else {
             res.status(400).json("Wrong email or password");
@@ -55,6 +54,8 @@ const login = (req, res) => {
         } else {
           res.status(400).json("Wrong email or password");
         }
+      } else {
+        res.status(404).json("Email not exist");
       }
     })
     .catch((err) => {
