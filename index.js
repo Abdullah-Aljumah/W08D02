@@ -8,8 +8,10 @@ app.use(express.json());
 
 const roleRouter = require("./routers/routes/role");
 app.use(roleRouter);
-const PORT = process.env.PORT || 5000;
+const userRouter = require("./routers/routes/user");
+app.use(userRouter);
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`SERVER RUNNING ON ${PORT}`);
 });
