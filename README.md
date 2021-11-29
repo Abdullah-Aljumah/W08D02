@@ -1,4 +1,4 @@
-# Packages
+## Dependencies
 
 - Dotenv
   to hide our content keys
@@ -33,4 +33,5 @@ npm i jsonwebtoken
   here the website [Mongoose](https://account.mongodb.com)
 
 ## Author
+
 @Abdullah-Aljumah
