@@ -1,9 +1,9 @@
-const userROuter = require("../../db/models/user");
+const userModel = require("../../db/models/user");
 
 const newUser = (req, res) => {
   const { email, password, role } = req.body;
 
-  const newUser = new userROuter({
+  const newUser = new userModel({
     email,
     password,
     role,
@@ -18,4 +18,15 @@ const newUser = (req, res) => {
     });
 };
 
-module.exports = { newUser };
+const getUsers = (req, res) => {
+    userModel
+    .find({})
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+}
+
+module.exports = { newUser, getUsers };
