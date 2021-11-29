@@ -1,5 +1,6 @@
 const userModel = require("../../db/models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const salt = Number(process.env.SALT);
 const secret = process.env.SECRET_KEY;
@@ -46,8 +47,12 @@ const login = (req, res) => {
       if (result) {
         if (result.email == email) {
           const savedPassword = await bcrypt.compare(password, result.password);
+          const payload = {
+            email,
+          };
           if (savedPassword) {
-            res.status(200).json(result);
+            let token = jwt.sign(payload, secret);
+            res.status(200).json({ result, token });
           } else {
             res.status(400).json("Wrong email or password");
           }
