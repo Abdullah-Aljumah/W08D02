@@ -1,11 +1,18 @@
 const userModel = require("../../db/models/user");
+const bcrypt = require("bcrypt");
 
-const resgister = (req, res) => {
+const salt = Number(process.env.SALT);
+const secret = process.env.SECRET_KEY;
+
+const resgister = async (req, res) => {
   const { email, password, role } = req.body;
 
+  const savedEmail = email.toLowerCase();
+  const savedPassword = await bcrypt.hash(password, salt);
+
   const newUser = new userModel({
-    email,
-    password,
+    email: savedEmail,
+    password: savedPassword,
     role,
   });
   newUser
@@ -31,11 +38,14 @@ const getUsers = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
+
+  const savedEmail = email.toLowerCase();
+
   userModel
-    .findOne({ email })
+    .findOne({ email: savedEmail })
     .then((result) => {
       if (result) {
-          console.log(result);
+        console.log(result);
         if (result.email == email) {
           if (result.password == password) {
             res.status(200).json(result);
